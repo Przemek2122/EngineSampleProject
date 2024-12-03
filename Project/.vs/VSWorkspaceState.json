@@ -13,12 +13,7 @@
   },
   "ExpandedNodes": [
     "",
-    "\\out",
-    "\\out\\build\\x64-debug",
-    "\\Project",
-    "\\Project\\Source",
-    "\\Project\\Source\\Private",
-    "\\Project\\Source\\Public"
+    "\\Source"
   ],
   "SelectedNode": "\\CMakeLists.txt",
   "PreviewInSolutionExplorer": false

@@ -2,8 +2,11 @@
 # and include sub-projects here.
 cmake_minimum_required (VERSION 3.8)
 
+# Config
 set(PROJECT_NAME "Project")
 set(ENGINE_PATH "C:/Repos/Engine/Engine")
+
+# Generated config
 set(ENGINE_BUILD_PATH "${CMAKE_BINARY_DIR}/Engine_build")
 
 # Enable Hot Reload for MSVC compilers if supported.
@@ -14,18 +17,18 @@ set(ENGINE_BUILD_PATH "${CMAKE_BINARY_DIR}/Engine_build")
 #endif()
 
 # Define project
-project(PROJECT_NAME)
+project("${PROJECT_NAME}")
 
 # Add source files for prject
 include_directories(${CMAKE_SOURCE_DIR}/Source/Public)
 include_directories(${CMAKE_SOURCE_DIR}/Source/Private)
 
-# Add exec
-add_executable(PROJECT_NAME "Project/Source/Private/Project.cpp")
+# Add executable
+add_executable("${PROJECT_NAME}" "Source/Private/Project.cpp")
 
 # Engine directory
 add_subdirectory(${ENGINE_PATH} ${ENGINE_BUILD_PATH})
 
 # Link engine
-target_link_libraries(PROJECT_NAME PRIVATE Engine)
+target_link_libraries("${PROJECT_NAME}" PRIVATE Engine)
 
