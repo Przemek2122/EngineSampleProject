@@ -32,3 +32,4 @@
 *.app
 /Project/out
 /Project/.vs/Project
+/output/build

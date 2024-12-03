@@ -1,18 +1,25 @@
 {
   "OutputFoldersPerTargetSystem": {
     "Local Machine": [
-      "out\\build\\x64-debug",
-      "out\\install\\x64-debug",
-      "out\\build\\x64-release",
-      "out\\install\\x64-release",
-      "out\\build\\x86-debug",
-      "out\\install\\x86-debug",
-      "out\\build\\x86-release",
-      "out\\install\\x86-release"
+      "..\\output\\build\\x64-debug",
+      "..\\output\\install\\x64-debug",
+      "..\\output\\build\\x64-release",
+      "..\\output\\install\\x64-release",
+      "..\\output\\build\\x86-debug",
+      "..\\output\\install\\x86-debug",
+      "..\\output\\build\\x86-release",
+      "..\\output\\install\\x86-release"
     ]
   },
   "ExpandedNodes": [
-    ""
+    "",
+    "\\out",
+    "\\out\\build\\x64-debug",
+    "\\Project",
+    "\\Project\\Source",
+    "\\Project\\Source\\Private",
+    "\\Project\\Source\\Public"
   ],
+  "SelectedNode": "\\CMakeLists.txt",
   "PreviewInSolutionExplorer": false
 }

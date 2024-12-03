@@ -1,15 +1,31 @@
 ﻿# CMakeList.txt : Top-level CMake project file, do global configuration
 # and include sub-projects here.
-#
 cmake_minimum_required (VERSION 3.8)
 
+set(PROJECT_NAME "Project")
+set(ENGINE_PATH "C:/Repos/Engine/Engine")
+set(ENGINE_BUILD_PATH "${CMAKE_BINARY_DIR}/Engine_build")
+
 # Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+# TODO: Check if it works, should be enabled by child project
+#if (POLICY CMP0141)
+#  cmake_policy(SET CMP0141 NEW)
+#  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+#endif()
 
-project ("Project")
+# Define project
+project(PROJECT_NAME)
 
-# Include sub-projects.
-add_subdirectory ("Project")
+# Add source files for prject
+include_directories(${CMAKE_SOURCE_DIR}/Source/Public)
+include_directories(${CMAKE_SOURCE_DIR}/Source/Private)
+
+# Add exec
+add_executable(PROJECT_NAME "Project/Source/Private/Project.cpp")
+
+# Engine directory
+add_subdirectory(${ENGINE_PATH} ${ENGINE_BUILD_PATH})
+
+# Link engine
+target_link_libraries(PROJECT_NAME PRIVATE Engine)
+
