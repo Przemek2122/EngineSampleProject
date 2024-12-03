@@ -19,16 +19,17 @@ set(ENGINE_BUILD_PATH "${CMAKE_BINARY_DIR}/Engine_build")
 # Define project
 project("${PROJECT_NAME}")
 
-# Add source files for prject
-include_directories(${CMAKE_SOURCE_DIR}/Source/Public)
-include_directories(${CMAKE_SOURCE_DIR}/Source/Private)
-
 # Add executable
-add_executable("${PROJECT_NAME}" "Source/Private/Project.cpp")
+add_executable("${PROJECT_NAME}" "Source/Private/Project.cpp" "Source/Private/ProjectEngine.cpp")
+
+# Add source files for prject
+target_include_directories( "${PROJECT_NAME}"
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Public
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Source/Private
+)
 
 # Engine directory
 add_subdirectory(${ENGINE_PATH} ${ENGINE_BUILD_PATH})
 
 # Link engine
 target_link_libraries("${PROJECT_NAME}" PRIVATE Engine)
-
