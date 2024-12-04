@@ -13,8 +13,10 @@
   },
   "ExpandedNodes": [
     "",
-    "\\Source"
+    "\\Source",
+    "\\Source\\Private",
+    "\\Source\\Public"
   ],
-  "SelectedNode": "\\CMakeLists.txt",
+  "SelectedNode": "\\Source\\Public\\ProjectEngine.h",
   "PreviewInSolutionExplorer": false
 }
