@@ -29,6 +29,13 @@
       "project": "CMakeLists.txt",
       "projectTarget": "SDL3_mixer.dll (bin\\Debug\\SDL3_mixer.dll)",
       "name": "SDL3_mixer.dll (bin\\Debug\\SDL3_mixer.dll)"
+    },
+    {
+      "type": "dll",
+      "exe": "",
+      "project": "CMakeLists.txt",
+      "projectTarget": "uv.dll (bin\\Debug\\uv.dll)",
+      "name": "uv.dll (bin\\Debug\\uv.dll)"
     }
   ]
 }
