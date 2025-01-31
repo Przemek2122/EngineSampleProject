@@ -16,10 +16,7 @@ protected:
 	FDefaultEngine();
 
 public:
-	void PreInit() override;
 	void Init() override;
-	void PostInit() override;
-
 	void Tick() override;
 	void PostSecondTick() override;
 

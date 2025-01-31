@@ -6,19 +6,11 @@ FDefaultEngine::FDefaultEngine()
 {
 }
 
-void FDefaultEngine::PreInit()
-{
-	FEngine::PreInit();
-}
-
 void FDefaultEngine::Init()
 {
 	FEngine::Init();
-}
 
-void FDefaultEngine::PostInit()
-{
-	FEngine::PostInit();
+	// ...
 }
 
 void FDefaultEngine::Tick()
