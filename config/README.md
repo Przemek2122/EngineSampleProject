@@ -13,6 +13,8 @@ For the most part, just run the scripts in this directory from this directory.
 - Android
 	- There is no easy CMake config for this platform. Instead, follow the steps as outlined below. See the android GitHub action for more details. 
 	1. Install Android Studio + NDK from https://developer.android.com/studio
- 	2. Copy `build.gradle` to `SDL/android-project/app/`. If you look inside `build.gradle`, you'll see `"../../../CMakeLists.txt"` as the path to the CMakeLists file. This points to the CMakeLists in this repo's root directory after it is copied. 
+ 	2.	Copy `build.gradle` to `SDL/android-project/app/`. (This project is located in 'Engine\ThirdParty\SDL\android-project' and needs to be copied)
+		If you look inside `build.gradle`, you'll see `"../../../CMakeLists.txt"` as the path to the CMakeLists file. 
+		This points to the CMakeLists in this repo's root directory after it is copied. 
   	3. `cd SDL/android-project/`
   	4. `./gradlew assembleDebug`. You'll get an apk which you can then install onto a device. 
