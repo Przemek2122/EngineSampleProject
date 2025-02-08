@@ -10,12 +10,9 @@ class FTextWidget;
 
 class FDefaultEngine : public FEngine
 {
-	friend FEngineManager;
-
-protected:
+public:
 	FDefaultEngine();
 
-public:
 	void Init() override;
 	void Tick() override;
 	void PostSecondTick() override;

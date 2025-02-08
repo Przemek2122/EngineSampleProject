@@ -1,19 +1,85 @@
 ﻿// Project.cpp : Defines the entry point for the application.
 
 #include "Project.h"
-#include "SDL3/SDL.h" // Include for SDL_Main
+#include "SDL3/SDL.h"
+#include "SDL3/SDL_main.h"
 #include "Core/CoreEngine.h"
 #include "ProjectEngine.h"
 
-/**
- * Do not change main name,
- * SDL will replace this function and will run their own
- * to be able to use this code in multi-platform setup
- */
+struct AppContext 
+{
+    FEngineManager EngineManager;
+
+    bool hasAppQuit = false;
+};
+
 int main(int argc, char* argv[])
 {
-	FEngineManager EngineManager;
-	EngineManager.Start<FDefaultEngine>(argc, argv);
+    FEngineManager EngineManager;
+    EngineManager.EngineClass.Set<FDefaultEngine>();
+    EngineManager.Start(argc, argv);
 
-	return 0;
+    return 0;
+}
+
+int SDL_Fail()
+{
+    SDL_LogError(SDL_LOG_CATEGORY_CUSTOM, "Error %s", SDL_GetError());
+
+    return -1;
+}
+
+int SDL_AppInit(void** AppState, int argc, char* argv[])
+{
+    // set up the application data
+    AppContext* NewAppState = new AppContext
+    {
+        FEngineManager()
+    };
+
+    *AppState = static_cast<void*>(NewAppState);
+
+    // Set class for engine of project
+    NewAppState->EngineManager.EngineClass.Set<FDefaultEngine>();
+
+    // Start init
+    NewAppState->EngineManager.Init(argc, argv);
+
+    SDL_Log("Application started successfully!");
+
+    return 0;
+}
+
+int SDL_AppEvent(void *AppState, const SDL_Event* event)
+{
+	AppContext* Context = static_cast<AppContext*>(AppState);
+    
+    if (event->type == SDL_EVENT_QUIT)
+	{
+        Context->hasAppQuit = true;
+    }
+
+    return 0;
+}
+
+int SDL_AppIterate(void *AppState)
+{
+	AppContext* Context = static_cast<AppContext*>(AppState);
+
+    Context->EngineManager.LoopIterate();
+
+    return Context->hasAppQuit;
+}
+
+void SDL_AppQuit(void* AppState)
+{
+    AppContext* Context = static_cast<AppContext*>(AppState);
+    if (Context != nullptr)
+	{
+        Context->EngineManager.Exit();
+
+        delete Context;
+    }
+
+    SDL_Log("Application quit successfully!");
 }
