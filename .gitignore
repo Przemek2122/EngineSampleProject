@@ -35,3 +35,6 @@
 /Project/out
 /Project/.vs/Project
 /build/win
+/build/android/android-project/.gradle/8.1.1
+/build/android/android-project/.gradle/buildOutputCleanup
+/build/android/android-project/.gradle/8.1.1/checksums
