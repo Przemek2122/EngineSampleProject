@@ -34,5 +34,4 @@
 # Ignore directories
 /Project/out
 /Project/.vs/Project
-/output/build
-/build
+/build/win
