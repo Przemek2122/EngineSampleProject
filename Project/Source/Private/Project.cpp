@@ -13,6 +13,7 @@ struct AppContext
     bool hasAppQuit = false;
 };
 
+#if !PLATFORM_ANDROID
 int main(int argc, char* argv[])
 {
     FEngineManager EngineManager;
@@ -21,6 +22,7 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+#endif
 
 int SDL_Fail()
 {

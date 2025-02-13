@@ -17,10 +17,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Generated config
 set(ENGINE_BUILD_PATH "${CMAKE_BINARY_DIR}/Engine_build")
 
+# @TODO: Force diasbled lib gme due to android issues but it should be fixed
+set(SDLMIXER_GME OFF CACHE BOOL "Disable support for GME music" FORCE)
+set(SDLMIXER_GME_SHARED OFF CACHE BOOL "Disable dynamic loading of libgme" FORCE)
+
 # Engine directory
 add_subdirectory(${ENGINE_PATH} ${ENGINE_BUILD_PATH})
 
 get_property(ENGINE_CONFIGURATION GLOBAL PROPERTY ENGINE_CONFIGURATION)
+
+set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source")
+set(PROJECT_SOURCE_PRIVATE_DIR "${PROJECT_SOURCE_DIR}/Private")
+set(PROJECT_SOURCE_PUBLIC_DIR "${PROJECT_SOURCE_DIR}/Public")
+
+# Collect source files
+file(GLOB_RECURSE PROJECT_SOURCE_FILES_PRIVATE "${PROJECT_SOURCE_PRIVATE_DIR}/*.cpp")
+file(GLOB_RECURSE PROJECT_SOURCE_FILES_PUBLIC "${PROJECT_SOURCE_PUBLIC_DIR}/*.h")
 
 # Set directories
 set(PROJECT_BIN_DIRECTORY_PATH "${CMAKE_BINARY_DIR}/bin")
@@ -61,8 +73,17 @@ endforeach()
 #  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 #endif()
 
-# Add executable
-add_executable("${PROJECT_NAME}" "Source/Private/Project.cpp" "Source/Private/ProjectEngine.cpp")
+# Depending on platform we want to add executable or build as library
+if(NOT ANDROID)
+    # Add executable
+    add_executable("${PROJECT_NAME}" "Source/Private/Project.cpp" "Source/Private/ProjectEngine.cpp")
+else()
+    # SHARED library
+    add_library("${PROJECT_NAME}" SHARED 
+        ${PROJECT_SOURCE_FILES_PRIVATE}
+        ${PROJECT_SOURCE_FILES_PUBLIC}
+    )
+endif()
 
 # Add source files for project
 target_include_directories("${PROJECT_NAME}"
