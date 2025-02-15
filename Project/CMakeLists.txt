@@ -31,8 +31,8 @@ set(PROJECT_SOURCE_PRIVATE_DIR "${PROJECT_SOURCE_DIR}/Private")
 set(PROJECT_SOURCE_PUBLIC_DIR "${PROJECT_SOURCE_DIR}/Public")
 
 # Collect source files
-file(GLOB_RECURSE PROJECT_SOURCE_FILES_PRIVATE "${PROJECT_SOURCE_PRIVATE_DIR}/*.cpp")
 file(GLOB_RECURSE PROJECT_SOURCE_FILES_PUBLIC "${PROJECT_SOURCE_PUBLIC_DIR}/*.h")
+file(GLOB_RECURSE PROJECT_SOURCE_FILES_PRIVATE "${PROJECT_SOURCE_PRIVATE_DIR}/*.cpp")
 
 # Set directories
 set(PROJECT_BIN_DIRECTORY_PATH "${CMAKE_BINARY_DIR}/bin")
@@ -41,9 +41,6 @@ set(PROJECT_LIB_DIRECTORY_PATH "${CMAKE_BINARY_DIR}/lib")
 # For all targets:
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/bin/Debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/Release)
-
-message(STATUS "PROJECT_BIN_DIRECTORY_PATH: '${PROJECT_BIN_DIRECTORY_PATH}'")
-message(STATUS "PROJECT_LIB_DIRECTORY_PATH: '${PROJECT_LIB_DIRECTORY_PATH}'")
 
 # Assets
 get_property(ASSETS_DIR_NAME GLOBAL PROPERTY ASSETS_DIR_NAME)
@@ -76,7 +73,7 @@ endforeach()
 # Depending on platform we want to add executable or build as library
 if(NOT ANDROID)
     # Add executable
-    add_executable("${PROJECT_NAME}" "Source/Private/Project.cpp" "Source/Private/ProjectEngine.cpp")
+    add_executable("${PROJECT_NAME}" ${PROJECT_SOURCE_FILES_PRIVATE} ${PROJECT_SOURCE_FILES_PUBLIC})
 else()
     # SHARED library
     add_library("${PROJECT_NAME}" SHARED 
@@ -85,10 +82,14 @@ else()
     )
 endif()
 
+source_group("Public" FILES ${PROJECT_SOURCE_FILES_PUBLIC})
+source_group("Private" FILES ${PROJECT_SOURCE_FILES_PRIVATE})
+
 # Add source files for project
 target_include_directories("${PROJECT_NAME}"
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Public
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Source/Private
+    PRIVATE ${PROJECT_SOURCE_DIR}
+    PRIVATE ${PROJECT_SOURCE_PRIVATE_DIR}
+    PUBLIC ${PROJECT_SOURCE_PUBLIC_DIR}
 )
 
 # Link engine

@@ -17,7 +17,7 @@ struct AppContext
 int main(int argc, char* argv[])
 {
     FEngineManager EngineManager;
-    EngineManager.EngineClass.Set<FDefaultEngine>();
+    EngineManager.EngineClass.Set<FProjectEngine>();
     EngineManager.Start(argc, argv);
 
     return 0;
@@ -42,7 +42,7 @@ int SDL_AppInit(void** AppState, int argc, char* argv[])
     *AppState = static_cast<void*>(NewAppState);
 
     // Set class for engine of project
-    NewAppState->EngineManager.EngineClass.Set<FDefaultEngine>();
+    NewAppState->EngineManager.EngineClass.Set<FProjectEngine>();
 
     // Start init
     NewAppState->EngineManager.Init(argc, argv);

@@ -5,13 +5,17 @@
 #include "Core/Engine.h"
 #include "Core/Memory/AutoDeletePointer.h"
 
+class FProjectGameMode;
 class FGameMode;
 class FTextWidget;
 
-class FDefaultEngine : public FEngine
+/**
+ * Primary engine class for your project.
+ */
+class FProjectEngine : public FEngine
 {
 public:
-	FDefaultEngine();
+	FProjectEngine();
 
 	void Init() override;
 	void Tick() override;
@@ -20,5 +24,7 @@ public:
 protected:
 	FWindow* GameWindow;
 	FTextWidget* TextFPSWidget;
-	FAutoDeletePointer<FGameMode> GameModePtr;
+
+	FGameModeManager* GameModeManager;
+	FProjectGameMode* GameMode;
 };
