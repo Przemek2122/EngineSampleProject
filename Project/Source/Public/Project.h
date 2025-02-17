@@ -3,6 +3,10 @@
 
 #pragma once
 
+#define PROJECT_API EXPORT_API
+
 #include <iostream>
 
-// TODO: Reference additional headers your program requires here.
+#include "CoreEngine.h"
+
+// Reference additional headers your program requires here.
