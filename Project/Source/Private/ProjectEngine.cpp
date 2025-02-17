@@ -23,7 +23,7 @@ void FProjectEngine::Init()
 	FWindowCreationData WindowCreationData(false);
 	const FVector2D<int32> NewWindowLocation = { 200, 200 };
 	const FVector2D<int32> NewWindowSize = { 800, 600 };
-	GameWindow = GEngine->GetEngineRender()->CreateWindow<FWindow>(WindowCreationData, "Sample window", NewWindowLocation, NewWindowSize);
+	GameWindow = GetEngineRender()->CreateWindow<FWindow>(WindowCreationData, "Sample window", NewWindowLocation, NewWindowSize);
 	if (GameWindow != nullptr)
 	{
 		// Create game mode subsystem for window
