@@ -25,6 +25,7 @@ set(SDLMIXER_GME_SHARED OFF CACHE BOOL "Disable dynamic loading of libgme" FORCE
 add_subdirectory(${ENGINE_PATH} ${ENGINE_BUILD_PATH})
 
 get_property(ENGINE_CONFIGURATION GLOBAL PROPERTY ENGINE_CONFIGURATION)
+get_property(ENGINE_CONFIGURATION GLOBAL PROPERTY RUNTIME_LIB_EXT)
 
 set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Source")
 set(PROJECT_SOURCE_PRIVATE_DIR "${PROJECT_SOURCE_DIR}/Private")
@@ -94,3 +95,31 @@ target_include_directories("${PROJECT_NAME}"
 
 # Link engine
 target_link_libraries("${PROJECT_NAME}" PRIVATE Engine)
+
+# Copy Engine library to output directory
+# Must be done after linking!
+if(WIN32)
+    # Windows - copy DLL
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:Engine>
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMENT "Copying Engine DLL to output directory"
+    )
+elseif(APPLE)
+    # macOS - copy dylib
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:Engine>
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMENT "Copying Engine dylib to output directory"
+    )
+elseif(UNIX AND NOT ANDROID)
+    # Linux - copy so
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:Engine>
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMENT "Copying Engine shared object to output directory"
+    )
+endif()
