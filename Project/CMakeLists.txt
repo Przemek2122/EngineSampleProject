@@ -21,6 +21,9 @@ set(ENGINE_BUILD_PATH "${CMAKE_BINARY_DIR}/Engine_build")
 set(SDLMIXER_GME OFF CACHE BOOL "Disable support for GME music" FORCE)
 set(SDLMIXER_GME_SHARED OFF CACHE BOOL "Disable dynamic loading of libgme" FORCE)
 
+# Make sure engine compiles as library
+set(ENGINE_BUILD_AS_LIBRARY ON CACHE BOOL "ON - build as library, OFF - build as executable" FORCE)
+
 # Engine directory
 add_subdirectory(${ENGINE_PATH} ${ENGINE_BUILD_PATH})
 
