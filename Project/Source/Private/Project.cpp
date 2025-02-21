@@ -13,16 +13,35 @@ struct AppContext
     bool hasAppQuit = false;
 };
 
-#if !PLATFORM_ANDROID
+//#if !PLATFORM_ANDROID
 int main(int argc, char* argv[])
 {
+	// Works, can be used to quickly test if it launches and is linked correctly
+	/*
+    (void)argc;
+    (void)argv;
+	
+    if (!SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO)) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_Init failed (%s)", SDL_GetError());
+        return 1;
+    }
+
+    if (!SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Hello World",
+                                 "!! Your SDL project successfully runs on Android !!", NULL)) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_ShowSimpleMessageBox failed (%s)", SDL_GetError());
+        return 1;
+    }
+
+    SDL_Quit();
+	*/
+	
     FEngineManager EngineManager;
     EngineManager.EngineClass.Set<FProjectEngine>();
     EngineManager.Start(argc, argv);
-
+	
     return 0;
 }
-#endif
+//#endif
 
 int SDL_Fail()
 {

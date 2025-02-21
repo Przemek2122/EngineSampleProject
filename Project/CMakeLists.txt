@@ -3,7 +3,8 @@
 cmake_minimum_required (VERSION 3.8)
 
 # Config
-set(PROJECT_NAME "Project")
+# Note: for android build 'main' as it expect library libmain.so
+set(PROJECT_NAME "main")
 set(ENGINE_PATH "C:/Repos/Engine/Engine")
 set(PROJECT_VERSION 0.0.1)
 

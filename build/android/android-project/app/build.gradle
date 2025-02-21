@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
     namespace "org.libsdl.app"
     defaultConfig {
         minSdkVersion 24
@@ -53,6 +53,13 @@ android {
     }
     lintOptions {
         abortOnError false
+    }
+    sourceSets {
+        main {
+            assets {
+                srcDirs 'src\\main\\assets'
+            }
+        }
     }
 }
 
