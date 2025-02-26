@@ -30,9 +30,10 @@ void FProjectEngine::Init()
 		GameModeManager = GameWindow->CreateSubSystem<FGameModeManager>(GameWindow);
 		GameMode = GameModeManager->CreateGameMode<FProjectGameMode>(true);
 
-		// Add sample 'FMouseSparkWidget' widget
+        // Get window manager for creating widgets
 		FWidgetManager* GameWindowWidgetManager = GameWindow->GetWidgetManager();
 
+        // Add sample 'FMouseSparkWidget' widget
 		GameWindowWidgetManager->CreateWidget<FMouseSparkWidget>("TestSparkWidget", 100);
 		TextFPSWidget = GameWindowWidgetManager->CreateWidget<FTextWidget>("TextFPS");
 		TextFPSWidget->SetText("FPS");
@@ -42,6 +43,7 @@ void FProjectEngine::Init()
 		VerticalBoxWidget->SetAnchor(EAnchor::Center);
 
 		FButtonWidget* StartButtonWidget = VerticalBoxWidget->CreateWidget<FButtonWidget>();
+		StartButtonWidget->UseDefaultSize();
 		FTextWidget* StartTextWidget = StartButtonWidget->CreateWidget<FTextWidget>();
 		StartTextWidget->SetText("Start");
 		StartButtonWidget->OnLeftClickPress.BindLambda([this, VerticalBoxWidget]
@@ -54,6 +56,7 @@ void FProjectEngine::Init()
 		});
 
 		FButtonWidget* ExitButtonWidget = VerticalBoxWidget->CreateWidget<FButtonWidget>();
+		ExitButtonWidget->UseDefaultSize();
 		FTextWidget* ExitTextWidget = ExitButtonWidget->CreateWidget<FTextWidget>();
 		ExitTextWidget->SetText("Exit");
 		ExitButtonWidget->OnLeftClickPress.BindLambda([this]
@@ -73,4 +76,6 @@ void FProjectEngine::Tick()
 void FProjectEngine::PostSecondTick()
 {
 	FEngine::PostSecondTick();
+
+	TextFPSWidget->SetText(std::to_string(FGlobalDefines::GEngine->GetFramesThisSecond()));
 }
