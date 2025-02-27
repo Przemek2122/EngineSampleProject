@@ -77,14 +77,17 @@ endforeach()
 
 # Depending on platform we want to add executable or build as library
 if(NOT ANDROID)
-    # Add executable
-    add_executable("${PROJECT_NAME}" ${PROJECT_SOURCE_FILES_PRIVATE} ${PROJECT_SOURCE_FILES_PUBLIC})
+	# Add executable
+	add_executable("${PROJECT_NAME}" ${PROJECT_SOURCE_FILES_PRIVATE} ${PROJECT_SOURCE_FILES_PUBLIC})
 else()
-    # SHARED library
-    add_library("${PROJECT_NAME}" SHARED 
-        ${PROJECT_SOURCE_FILES_PRIVATE}
-        ${PROJECT_SOURCE_FILES_PUBLIC}
-    )
+	# The SDL java code is hardcoded to load libmain.so on android, so we need to change EXECUTABLE_NAME
+	set(EXECUTABLE_NAME main)
+	
+	# SHARED library
+	add_library("${PROJECT_NAME}" SHARED 
+		${PROJECT_SOURCE_FILES_PRIVATE}
+		${PROJECT_SOURCE_FILES_PUBLIC}
+	)
 endif()
 
 source_group("Public" FILES ${PROJECT_SOURCE_FILES_PUBLIC})
