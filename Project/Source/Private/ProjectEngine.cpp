@@ -41,6 +41,7 @@ void FProjectEngine::Init()
 
 		FVerticalBoxWidget* VerticalBoxWidget = GameWindow->GetWidgetManager()->CreateWidget<FVerticalBoxWidget>("TestVerticalBoxWidget");
 		VerticalBoxWidget->SetAnchor(EAnchor::Center);
+		VerticalBoxWidget->SetWidgetSizePercent({ 0.5f, 0.5f }, EWidgetSizeType::ParentPercentage);
 
 		FButtonWidget* StartButtonWidget = VerticalBoxWidget->CreateWidget<FButtonWidget>();
 		StartButtonWidget->UseDefaultSize();
