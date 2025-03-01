@@ -38,6 +38,7 @@ void FProjectEngine::Init()
 		TextFPSWidget = GameWindowWidgetManager->CreateWidget<FTextWidget>("TextFPS");
 		TextFPSWidget->SetText("FPS");
 		TextFPSWidget->SetAnchor(EAnchor::RightTop);
+		TextFPSWidget->SetTextWidgetSizeType(ETextWidgetSizeType::None);
 
 		FVerticalBoxWidget* VerticalBoxWidget = GameWindow->GetWidgetManager()->CreateWidget<FVerticalBoxWidget>("TestVerticalBoxWidget");
 		VerticalBoxWidget->SetAnchor(EAnchor::Center);
@@ -78,5 +79,6 @@ void FProjectEngine::PostSecondTick()
 {
 	FEngine::PostSecondTick();
 
-	TextFPSWidget->SetText(std::to_string(FGlobalDefines::GEngine->GetFramesThisSecond()));
+	// Update FPS number every second
+	//TextFPSWidget->SetText(std::to_string(FGlobalDefines::GEngine->GetFramesThisSecond()));
 }
