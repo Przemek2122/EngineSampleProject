@@ -1,6 +1,5 @@
 name: Build Sample
 on: [push, pull_request]
-
 jobs:
     build-win:
         name: Build for Windows
@@ -9,26 +8,31 @@ jobs:
           fail-fast: false
           matrix:
               arch: [x64, ARM64]
-              target: [Windows, WindowsStore]
-
         steps:
           - uses: actions/checkout@v4
             with:
                 submodules: true
-          - name: Configure
-            run: | 
-                mkdir build && cd build
-                cmake -DCMAKE_SYSTEM_NAME=${{ matrix.target }} -DCMAKE_SYSTEM_VERSION="10.0" -A${{ matrix.arch }} ..
-          - name: Build
-            run: cmake --build build --target sdl-min --config Release
-          - name: Upload Build
+          
+          - name: Run Build Script
+            run: |
+                cd Scripts
+                config-win.bat ${{ matrix.arch }}
+            shell: cmd
+            env:
+              CI: true
+          
+          - name: Upload Build Artifacts
             uses: actions/upload-artifact@v4
-            if: ${{ matrix.target != 'WindowsStore' }}
             with: 
-                name: sdl-min-${{ matrix.target }}-${{ matrix.arch }}
+                name: build-win-${{ matrix.arch }}
                 path: |
-                    build/Release/*.exe
-                    build/Release/*.dll
+                    build/win-${{ matrix.arch }}/bin/**/*.exe
+                    build/win-${{ matrix.arch }}/bin/**/*.dll
+                    build/win-${{ matrix.arch }}/lib/**/*.lib
+                    build/win-${{ matrix.arch }}/Release/**/*.exe
+                    build/win-${{ matrix.arch }}/Release/**/*.dll
+                    build/win-${{ matrix.arch }}/Debug/**/*.exe
+                    build/win-${{ matrix.arch }}/Debug/**/*.dll
 
     build-mac:
         name: Build for Apple
@@ -37,7 +41,6 @@ jobs:
           fail-fast: false
           matrix:
               target: [iOS, tvOS, visionOS, '']
-
         steps:
           - uses: actions/checkout@v4
             with:
@@ -52,7 +55,6 @@ jobs:
                 cmake -G "Xcode" -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO -DCMAKE_SYSTEM_NAME=${{ matrix.target }} -DSDL_STATIC=ON -DSDL_SHARED=OFF ..
           - name: Build
             run: cmake --build build --target install --config Release
-
           - name: Create DMG
             run: | 
                 cd build
