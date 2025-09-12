@@ -16,7 +16,7 @@ jobs:
           
           - name: Run Build Script
             run: |
-                cd Scripts
+                cd config
                 config-win.bat ${{ matrix.arch }}
             shell: cmd
             env:
