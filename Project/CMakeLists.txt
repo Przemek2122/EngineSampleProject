@@ -62,13 +62,7 @@ endif()
 #==============================================================================
 
 # Engine directory
-
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${ENGINE_PATH}")
-    add_subdirectory(${ENGINE_PATH} ${ENGINE_BUILD_PATH})
-else()
-    # When building from root, Engine is at different location
-    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/Engine/Engine" ${ENGINE_BUILD_PATH})
-endif()
+add_subdirectory(${ENGINE_PATH} ${ENGINE_BUILD_PATH})
 
 # Engine config
 set(ENGINE_COPY_ENGINE_MAPS OFF)
@@ -130,7 +124,7 @@ if(CMAKE_GENERATOR MATCHES "Visual Studio")
         COMMAND ${CMAKE_COMMAND} -E copy_directory 
             "${ASSETS_ENGINE_TARGET_PATH}" 
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets"
-        COMMENT "Copying game assets to output directory..."
+        COMMENT "Copying project assets to output directory..."
     )
 endif()
 
@@ -170,8 +164,16 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 # TESTS
 #==============================================================================
 
-# No andoird test support
-if(WIN32)
+set(PROJECT_TESTS_ENABLED FALSE)
+
+# Decide if we want tests (for now only windows x64)
+if(WIN32 AND NOT CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+    if(CMAKE_GENERATOR_PLATFORM STREQUAL "x64" OR (NOT DEFINED CMAKE_GENERATOR_PLATFORM AND CMAKE_SIZEOF_VOID_P EQUAL 8))
+        set(PROJECT_TESTS_ENABLED TRUE)
+    endif()
+endif()
+
+if(PROJECT_TESTS_ENABLED)
     message(STATUS "Adding google tests")
 
     # Create test executable
@@ -230,15 +232,15 @@ if(WIN32)
     message(STATUS "Added google tests!")
 endif()
 
-if(WIN32)
+if(PROJECT_TESTS_ENABLED)
     # Target for build all (To use from config script)
     add_custom_target(BuildAllProject ALL
-        DEPENDS Engine Game ProjectTests
+        DEPENDS Engine "${PROJECT_NAME}" ProjectTests
     )
 else()
     # Target for build all (To use from config script)
     add_custom_target(BuildAllProject ALL
-        DEPENDS Engine Game
+        DEPENDS Engine "${PROJECT_NAME}"
     )
 endif()
 
@@ -266,7 +268,7 @@ copy_runtime_dlls("${PROJECT_NAME}")
 
 group_targets("Core" "${PROJECT_NAME}")
 
-if(WIN32)
+if(PROJECT_TESTS_ENABLED)
     copy_runtime_dlls(ProjectTests)
 
     # Special test dlls copy

@@ -10,10 +10,15 @@ jobs:
         with:
           submodules: false  # Don't auto-download, use custom script
           
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nasm
+          
       - name: Download Submodules
         run: |
-          chmod +x DownloadSubmodules.sh
-          ./DownloadSubmodules.sh
+          echo "Using git submodule update"
+          git submodule update --init --recursive
         shell: bash
       
       - uses: actions/setup-java@v4

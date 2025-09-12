@@ -6,14 +6,15 @@ jobs:
     name: Build for Web
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           submodules: false  # Don't auto-download, use custom script
           
       - name: Download Submodules
         run: |
-          chmod +x DownloadSubmodules.sh
-          ./DownloadSubmodules.sh
+          echo "Using git submodule update"
+          git submodule update --init --recursive
         shell: bash
       
       - name: Setup Emscripten
@@ -27,11 +28,11 @@ jobs:
       
       - name: Build for web
         run: |
-            rm -rf build
-            mkdir build
-            cd build
-            emcmake cmake -DCMAKE_BUILD_TYPE=Release ../Project  # Point to Project/
-            cmake --build . --parallel $(nproc)
+          rm -rf build  # Remove existing build directory
+          mkdir build
+          cd build
+          emcmake cmake -DCMAKE_BUILD_TYPE=Release ../Project
+          cmake --build . --parallel $(nproc)
       
       - name: Prepare for upload
         run: |

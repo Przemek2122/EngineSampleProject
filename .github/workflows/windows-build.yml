@@ -16,21 +16,8 @@ jobs:
           
           - name: Download Submodules
             run: |
-                # Method 1: Try custom script if it exists
-                if (Test-Path "Scripts/DownloadSubmodules.sh") {
-                    Write-Host "Using DownloadSubmodules.sh"
-                    bash Scripts/DownloadSubmodules.sh
-                }
-                # Method 2: Try Git script
-                elseif (Test-Path "Engine/Scripts/Git/UpdateSubmodulesRecursiveGit.sh") {
-                    Write-Host "Using UpdateSubmodulesRecursiveGit.sh"
-                    bash Engine/Scripts/Git/UpdateSubmodulesRecursiveGit.sh
-                }
-                # Method 3: Fallback to git command
-                else {
-                    Write-Host "Using git submodule update"
-                    git submodule update --init --recursive
-                }
+                Write-Host "Using git submodule update"
+                git submodule update --init --recursive
             shell: powershell
           
           - name: Verify Submodules
