@@ -1,6 +1,8 @@
 ﻿// Project.cpp : Defines the entry point for the application.
 
 #include "Project.h"
+
+#if !defined(FLAGS_TESTING_PROJECT)
 #include "SDL3/SDL.h"
 #include "SDL3/SDL_main.h"
 #include "Core/CoreEngine.h"
@@ -104,3 +106,4 @@ void SDL_AppQuit(void* AppState)
 
     SDL_Log("Application quit successfully!");
 }
+#endif

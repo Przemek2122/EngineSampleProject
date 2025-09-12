@@ -3,18 +3,23 @@ on: [push, pull_request]
 
 jobs:
   build-web:
-    name: Build demo for Web
+    name: Build for Web
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4  # Updated to v4
+      - uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: false  # Don't auto-download, use custom script
+          
+      - name: Download Submodules
+        run: |
+          chmod +x DownloadSubmodules.sh
+          ./DownloadSubmodules.sh
+        shell: bash
       
       - name: Setup Emscripten
         uses: mymindstorm/setup-emsdk@v14
         with:
-          version: '3.1.45'  # Use stable version instead of 'tot'
+          version: '3.1.45'
           actions-cache-folder: 'emsdk-cache'
       
       - name: Verify Emscripten
@@ -22,14 +27,15 @@ jobs:
       
       - name: Build for web
         run: |
-          mkdir build
-          cd build
-          emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
-          cmake --build . --parallel $(nproc)
+            rm -rf build
+            mkdir build
+            cd build
+            emcmake cmake -DCMAKE_BUILD_TYPE=Release ../Project  # Point to Project/
+            cmake --build . --parallel $(nproc)
       
       - name: Prepare for upload
         run: |
-           mkdir _site
+           mkdir -p _site  # Use -p to avoid errors if it exists
            mv build/sdl-min.html _site/index.html
            mv build/sdl-* _site/
       
@@ -40,7 +46,7 @@ jobs:
          done
       
       - name: Upload 
-        uses: actions/upload-pages-artifact@v3  # Updated to v3
+        uses: actions/upload-pages-artifact@v4  # Updated to v4
         
  # Deploy job
   deploy:
@@ -59,4 +65,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4  # Updated to v4
+        uses: actions/deploy-pages@v4

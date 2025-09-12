@@ -206,7 +206,7 @@ if(NOT ANDROID)
 	# Skip project run as we run tests instead
 	# A bit hacky but simple
 	target_compile_definitions(ProjectTests PRIVATE
-		SKIP_PROJECT_RUN
+		FLAGS_TESTING_PROJECT
 	)
 
     # Discover and register tests
@@ -251,6 +251,12 @@ endfunction()
 # Use it for your executables
 copy_runtime_dlls("${PROJECT_NAME}")
 copy_runtime_dlls(ProjectTests)
+
+# Special test dlls copy
+add_custom_command(TARGET ProjectTests POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:ProjectTests>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:ProjectTests>
+)
 
 # Discover after DLLs are copied
 if(NOT ANDROID)

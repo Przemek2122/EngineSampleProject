@@ -1,4 +1,4 @@
-name: Build Win & Mac
+name: Build Windows
 on: [push, pull_request]
 
 jobs:
@@ -12,7 +12,49 @@ jobs:
         steps:
           - uses: actions/checkout@v4
             with:
-                submodules: true
+                submodules: false  # Don't auto-checkout, handle manually
+          
+          - name: Download Submodules
+            run: |
+                # Method 1: Try custom script if it exists
+                if (Test-Path "Scripts/DownloadSubmodules.sh") {
+                    Write-Host "Using DownloadSubmodules.sh"
+                    bash Scripts/DownloadSubmodules.sh
+                }
+                # Method 2: Try Git script
+                elseif (Test-Path "Engine/Scripts/Git/UpdateSubmodulesRecursiveGit.sh") {
+                    Write-Host "Using UpdateSubmodulesRecursiveGit.sh"
+                    bash Engine/Scripts/Git/UpdateSubmodulesRecursiveGit.sh
+                }
+                # Method 3: Fallback to git command
+                else {
+                    Write-Host "Using git submodule update"
+                    git submodule update --init --recursive
+                }
+            shell: powershell
+          
+          - name: Verify Submodules
+            run: |
+                Write-Host "Checking submodule directories..."
+                if (Test-Path "Engine/ThirdParty/SDL/CMakeLists.txt") {
+                    Write-Host "SDL submodule found"
+                } else {
+                    Write-Host "SDL submodule missing"
+                    if (Test-Path "Engine/ThirdParty/") {
+                        Get-ChildItem "Engine/ThirdParty/" -ErrorAction SilentlyContinue
+                    } else {
+                        Write-Host "Engine/ThirdParty directory does not exist"
+                    }
+                }
+            shell: powershell
+          
+          - name: Clean Build Directory
+            run: |
+                if (Test-Path "build") {
+                    Remove-Item "build" -Recurse -Force
+                    Write-Host "Cleaned existing build directory"
+                }
+            shell: powershell
           
           - name: Run Build Script
             run: |
@@ -32,36 +74,3 @@ jobs:
                     build/win-${{ matrix.arch }}/lib/**/*.lib
                     build/win-${{ matrix.arch }}/Release/**/*.exe
                     build/win-${{ matrix.arch }}/Release/**/*.dll
-                    build/win-${{ matrix.arch }}/Debug/**/*.exe
-                    build/win-${{ matrix.arch }}/Debug/**/*.dll
-
-    build-mac:
-        name: Build for Apple
-        runs-on: macos-14
-        strategy:
-          fail-fast: false
-          matrix:
-              target: [iOS, tvOS, visionOS, '']
-        steps:
-          - uses: actions/checkout@v4
-            with:
-                submodules: true
-          - name: Setup Xcode version
-            uses: maxim-lobanov/setup-xcode@v1.6.0
-            with:
-                xcode-version: "15.2"
-          - name: Configure
-            run: | 
-                mkdir build && cd build
-                cmake -G "Xcode" -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO -DCMAKE_SYSTEM_NAME=${{ matrix.target }} -DSDL_STATIC=ON -DSDL_SHARED=OFF ..
-          - name: Build
-            run: cmake --build build --target install --config Release
-          - name: Create DMG
-            run: | 
-                cd build
-                hdiutil create -size 2g -srcfolder release -volname sdl_min_apple_${{ matrix.target }} sdl_min_apple_${{ matrix.target }}.dmg
-          - name: Upload Build
-            uses: actions/upload-artifact@v4
-            with: 
-                name: sdl-min-apple-${{ matrix.target }}
-                path: build/*.dmg
