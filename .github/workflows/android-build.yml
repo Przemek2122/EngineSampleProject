@@ -18,11 +18,11 @@ jobs:
 
       - name: Update the build.gradle
         run:  |
-               cp build.gradle SDL/android-project/app/
+               cp build.gradle build/android/android-project/app/
 
       - name: Build the APK
         run: |
-              cd SDL/android-project/
+              cd build/android/android-project/
               ./gradlew assembleDebug
 
       - name: Upload the APK
