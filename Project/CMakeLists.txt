@@ -62,7 +62,13 @@ endif()
 #==============================================================================
 
 # Engine directory
-add_subdirectory(${ENGINE_PATH} ${ENGINE_BUILD_PATH})
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${ENGINE_PATH}")
+    add_subdirectory(${ENGINE_PATH} ${ENGINE_BUILD_PATH})
+else()
+    # When building from root, Engine is at different location
+    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/Engine/Engine" ${ENGINE_BUILD_PATH})
+endif()
 
 # Engine config
 set(ENGINE_COPY_ENGINE_MAPS OFF)
@@ -165,7 +171,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 #==============================================================================
 
 # No andoird test support
-if(NOT ANDROID)
+if(WIN32)
     message(STATUS "Adding google tests")
 
     # Create test executable
@@ -224,10 +230,17 @@ if(NOT ANDROID)
     message(STATUS "Added google tests!")
 endif()
 
-# Target for build all (To use from config script)
-add_custom_target(BuildAllProject ALL
-    DEPENDS Engine Game ProjectTests
-)
+if(WIN32)
+    # Target for build all (To use from config script)
+    add_custom_target(BuildAllProject ALL
+        DEPENDS Engine Game ProjectTests
+    )
+else()
+    # Target for build all (To use from config script)
+    add_custom_target(BuildAllProject ALL
+        DEPENDS Engine Game
+    )
+endif()
 
 if(WIN32)
     add_custom_target(open_vs
@@ -250,25 +263,25 @@ endfunction()
 
 # Use it for your executables
 copy_runtime_dlls("${PROJECT_NAME}")
-copy_runtime_dlls(ProjectTests)
 
-# Special test dlls copy
-add_custom_command(TARGET ProjectTests POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:ProjectTests>
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:ProjectTests>
-)
+group_targets("Core" "${PROJECT_NAME}")
 
-# Discover after DLLs are copied
-if(NOT ANDROID)
-    # After Engine DLL
+if(WIN32)
+    copy_runtime_dlls(ProjectTests)
+
+    # Special test dlls copy
+    add_custom_command(TARGET ProjectTests POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:ProjectTests>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest_main> $<TARGET_FILE_DIR:ProjectTests>
+    )
+
+    # Discover after DLLs are copied
     gtest_discover_tests(ProjectTests)
+
+    group_targets("Tests" ProjectTests)
 
     message(STATUS "Discovered gtests")
 endif()
-
-# Group targets
-group_targets("Core" "${PROJECT_NAME}")
-group_targets("Tests" ProjectTests)
 
 # Then group everything else
 group_remaining_targets()
