@@ -1,5 +1,6 @@
 name: Build Sample For Web
 on: [push, pull_request]
+
 jobs:
   build-web:
     name: Build demo for Web

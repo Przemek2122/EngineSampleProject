@@ -1,5 +1,6 @@
 name: Build Sample
 on: [push, pull_request]
+
 jobs:
     build-win:
         name: Build for Windows
