@@ -1,6 +1,9 @@
-﻿# CMakeList.txt : Top-level CMake project file, do global configuration
-# and include sub-projects here.
-cmake_minimum_required (VERSION 3.8)
+﻿# CMakeList.txt : Top-level CMake project file, 
+# do global configuration and include sub-projects here.
+cmake_minimum_required (VERSION 3.1.1...4.1.1)
+
+# MIN CMAKE VERSION OVERRIDE FOR SDL_TTF/FREETYPE
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
 #==============================================================================
 # Config
