@@ -52,6 +52,14 @@ cd Engine
 git submodule update --init --recursive
 ```
 
+---
+
 ## License
 
-This project is licensed under the terms defined in the repository. Please refer to the `LICENSE` file for more details.
+This project doesn’t specify a license. For any usage or distribution inquiries, please contact the repository owner, [Przemek2122](https://github.com/Przemek2122).
+
+---
+
+## About the Author
+
+The repository is maintained by [Przemek2122](https://github.com/Przemek2122). Feedback, ideas, and collaboration are warmly invited.
